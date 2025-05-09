@@ -19,6 +19,19 @@ body{
     width:100%;
     background-color:coral
 }
+#space{
+  background: repeating-linear-gradient(
+  45deg,
+  #ef7a06,
+  #07070700 10px,
+  #ef7a06 10px,
+  #07070700 20px
+);
+  width:100%;
+  height:100%;
+  grid-column:3/5;
+  grid-row:1/5;
+}
 #path1
 {
   width:100%;
@@ -63,7 +76,7 @@ body{
   border-right:20px;
   border-bottom:20px;
   border-style:solid;
-  border-color: goldenrod;
+  border-color: hsl(55, 78%, 50%);
   margin:0px;
   padding:0px;
   background-color: #FFFF;

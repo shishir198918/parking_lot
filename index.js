@@ -1,3 +1,7 @@
+// let slot=fetch("https://parking-lot-mm97.onrender.com/slots",{headers:{"sec-fetch-site":"cross-site","sec-fetch-mode":"cors"}})
+
+
+
 function setlocation(element,row,col){
     
     Object.assign(element.style,{gridRowStart:row,gridColumnStart:col});
@@ -7,11 +11,11 @@ function setlocation(element,row,col){
 };
 
 function add_element_into_floor(){
-    button_list=document.querySelectorAll(".floor")
+    let button_list=document.querySelectorAll(".floor")
     for( let i=0; i<button_list.length; i++){
         button_list[i].onclick=function(){
-            floor_no=this.innerHTML
-            return distribute_floor(floor_no)
+           let floor_no=this.innerHTML
+         distribute_floor(floor_no)
 
         }
     }
@@ -22,32 +26,17 @@ function add_element_into_floor(){
 function svg(){
     let image=document.createElement("img")
     image.setAttribute("class","svg")
-    image.setAttribute("src","/media/shishir/Windows/Projects/parkinglot/parking/data/car-line-drawing-that-can-be-used-for-svgrepo-com.svg")
+    image.setAttribute("src","data/car-line-drawing-that-can-be-used-for-svgrepo-com.svg")
     return image
 }
 
-function distribute_floor(floor_no){
-    floor_no = parseInt(floor_no);
-    if (floor_no>0){
-        for(let col=1;col<7;col++){
-            if(col===2 || col===5){
-                continue;
-            }
-            for(let row=1;row<5;row++){
-                document.querySelector(".body").appendChild(create_parking_slot(row,col));
-                
-                if(true){
-                    document.querySelector(`#parkingspace${row}${col}`).appendChild(svg())
-                }
-                
-            }
-
-        }
-    }
-
+function distribute_floor(floor_no="0"){
+    removeElement()
+    body=configure_floor(floor_no)
+    
 }
 
-function create_parking_slot(row=2,col=3){
+function create_parking_slot(row,col){
     
     let frame_div= document.createElement("div");
     // frame_div.setAttribute("style","");
@@ -68,8 +57,44 @@ function create_parking_slot(row=2,col=3){
 
 }
 
+function removeElement(){
+    if((document.querySelectorAll(".slot")).length){
+       for(let node of document.querySelectorAll(".slot")){
+        node.remove()
+       }
+    }
+}
+
+function configure_floor(floor_no="0"){
+    let body=document.querySelector(".body")
+
+    if(floor_no==0){
+        ele=document.createElement("div");
+        ele.setAttribute("id","space");
+        body.appendChild(ele);  
+        for(let col of [1,6]){
+            for(let row=1;row<5;row++){
+                let parking_space=create_parking_slot(row,col)
+                body.appendChild(parking_space)
+            }
+        }      
+    }
+    else{
+          if(document.querySelector("#space")){
+            const div=document.querySelector("#space")
+            div.remove()
+            }
+            for(let col of [1,3,4,6]){
+                for(let row=1;row<5;row++){
+                    let parking_space=create_parking_slot(row,col)
+                    body.appendChild(parking_space)                
+                }          
+            }    
+}
+return body
+}
+
 function add_element(){
     document.querySelector(".body").appendChild(create_parking_slot())
 }
-document.addEventListener("DOMContentLoaded",add_element);
-document.addEventListener("DOMContentLoaded",add_element_into_floor)
+document.addEventListener("DOMContentLoaded",add_element_into_floor);
