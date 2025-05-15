@@ -1,6 +1,59 @@
 // let slot=fetch("https://parking-lot-mm97.onrender.com/slots",{headers:{"sec-fetch-site":"cross-site","sec-fetch-mode":"cors"}})
 
+async function slots(){
+    let response= await fetch("https://parking-lot-mm97.onrender.com/api/slots")
+    let slot= await response.json() // json()also return a promise
+    return slot
 
+}
+
+
+
+function getRowFromSlot(row){
+    parseInt(row)
+    if(row%4===0){
+        return 4
+    }
+    return row%4
+}
+function mapWithSlot(slot,floor_no){
+    let col;
+    let row=getRowFromSlot(slot)
+    if(floor_no==0){
+        if(5>slot && slot>0){
+            col=1
+        }
+        else{
+            col=6
+        }
+    }
+    else{
+        if(5>slot && slot>0){
+            col=1
+        }
+        if(9>slot && slot >4){
+            col=3
+        }
+        if(13>slot && slot>8){
+            col=4
+        }
+        if(17>slot && slot>12){
+            col=6
+        }
+
+    }
+
+    return [row,col]
+}
+ async function parkCar(floor_no){
+    let parking_slots= await slots()
+    for (let slot of parking_slots){
+        if(slot["floor_number"]==floor_no && slot["car"]!==null){
+            let location=mapWithSlot(slot["slot_number"],floor_no)
+            document.querySelector(`#parking${location[0]}${location[1]}`).appendChild(svg())
+        }
+    } 
+}
 
 function setlocation(element,row,col){
     
@@ -30,11 +83,11 @@ function svg(){
     return image
 }
 
-function distribute_floor(floor_no="0"){
+function distribute_floor(floor_no){
     removeElement()
-    body=configure_floor(floor_no)
-    
+    body=configure_floor(floor_no)   
 }
+
 
 function create_parking_slot(row,col){
     
@@ -46,7 +99,7 @@ function create_parking_slot(row,col){
     let parking_line=document.createElement("div");
     // parking_line.setAttribute("style","");
     parking_line.setAttribute("class","parkingspace");
-    parking_line.setAttribute("id",`parkingspace${row}${col}`)
+    parking_line.setAttribute("id",`parking${row}${col}`)
 
     // adding parking_line div into frame div
 
@@ -58,6 +111,7 @@ function create_parking_slot(row,col){
 }
 
 function removeElement(){
+    // implent using for of 
     if((document.querySelectorAll(".slot")).length){
        for(let node of document.querySelectorAll(".slot")){
         node.remove()
@@ -65,7 +119,7 @@ function removeElement(){
     }
 }
 
-function configure_floor(floor_no="0"){
+function configure_floor(floor_no){
     let body=document.querySelector(".body")
 
     if(floor_no==0){
@@ -77,7 +131,9 @@ function configure_floor(floor_no="0"){
                 let parking_space=create_parking_slot(row,col)
                 body.appendChild(parking_space)
             }
-        }      
+            
+        }
+        parkCar(floor_no)      
     }
     else{
           if(document.querySelector("#space")){
@@ -88,13 +144,13 @@ function configure_floor(floor_no="0"){
                 for(let row=1;row<5;row++){
                     let parking_space=create_parking_slot(row,col)
                     body.appendChild(parking_space)                
-                }          
-            }    
+                }
+                          
+            }
+            parkCar(floor_no)    
 }
 return body
 }
 
-function add_element(){
-    document.querySelector(".body").appendChild(create_parking_slot())
-}
+
 document.addEventListener("DOMContentLoaded",add_element_into_floor);
