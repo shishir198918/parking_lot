@@ -10,12 +10,30 @@
     </script>
 </head>
 <body>
-    <header>Parking Lot
+    <div id="header">Parking Lot
         <button class="floor">0</button>
         <button class="floor">1</button>
         <button class="floor">2</button>
         <button class="floor">3</button>
-    </header>
+        <button class="popupform">New Park</button>
+        <dialog>
+            <button  autofocus  class="close-button" aria-label="Close alert" type="button" data-close>
+                <span aria-hidden="true">&times;</span>
+              </button>
+            <form id="parking_entry" action="https://parking-lot-mm97.onrender.com/api/tickets" method="POST">
+                <label>Number_plate</label>
+                <input type="text" name="Number_plate">
+                <br>
+                <label>Brand name</label>
+                <input type="text"  name="Brand">
+                <br>
+                <label>Color</label>
+                <input type="color" name="color">
+                <button type="submit">Park</button>
+            </form>
+            
+          </dialog>
+    </div>
     
     <div class="body">
         <div id="path1"></div>
